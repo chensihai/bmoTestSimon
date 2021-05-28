@@ -14,12 +14,16 @@ class Search extends React.Component {
             return (
                 <div className="results-container">
                     { this.state.Books.map(result => {
-                        debugger;
+                        if (result.isbn) {
+                            if (result.isbn[0]) {
                         return (
-                            <a key={result.id} href={`http://openlibrary.org/api/volumes/brief/isbn/${result.isbn}.json`} className="result-item">
+                            <a key={result.id} href={`http://openlibrary.org/api/volumes/brief/isbn/${result.isbn[0]}.json`} className="result-item" target="detail">
                                 <h6 className="image-username">{result.title}</h6>
                             </a>
                         )
+                            } else return false;
+
+                        } else return false;
                     })}
 
                 </div>
