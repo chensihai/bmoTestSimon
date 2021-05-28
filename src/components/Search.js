@@ -9,6 +9,25 @@ class Search extends React.Component {
         };
     }
 
+    searchResult = () => {
+        if (this.state.hasOwnProperty("Books")) {
+            return (
+                <div className="results-container">
+                    { this.state.Books.map(result => {
+                        debugger;
+                        return (
+                            <a key={result.id} href={`http://openlibrary.org/api/volumes/brief/isbn/${result.isbn}.json`} className="result-item">
+                                <h6 className="image-username">{result.title}</h6>
+                            </a>
+                        )
+                    })}
+
+                </div>
+            )
+        }
+
+    }
+
     componentDidMount() {
         this.setState({ inputValue: this.props.inputValue });
     }
@@ -27,28 +46,32 @@ class Search extends React.Component {
                 console.log(e);
                 this.setState({ ...this.state, isFetching: false });
             });
-        
+
     };
-    
-    async searchFetch(key){
+
+    async searchFetch(key) {
 
         console.log(key);
-        var fetchBooks = this.fetchBooksWithFetchAPI("http://openlibrary.org/search.json?q=" + key)
-  
+        this.fetchBooksWithFetchAPI("http://openlibrary.org/search.json?q=" + key)
+
 
     }
 
-    Book() {
-        //this.state.Books.length
-        return ("test");
-    }
+
+
+
     render() {
-        return (<header className="App-header">
-            Please type keywords to search your favoriate book
-            <input value={this.state.inputValue} onChange={this.handleChange} onBlur={() => this.searchFetch(this.state.inputValue)} className="search_field" />
-        </header>
-        );
+        return (
+            <div>
+                <div className="App-header">
+                    Please type keywords to search your favoriate book
+                <input value={this.state.inputValue} onChange={this.handleChange} onBlur={() => this.searchFetch(this.state.inputValue)} className="search_field" />
+                </div>
+                <hr />
+                {this.searchResult()}
 
+            </div>
+        )
     }
 
 }
