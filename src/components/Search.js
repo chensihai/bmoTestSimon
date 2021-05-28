@@ -1,5 +1,4 @@
 import React, { useState, setState, setData } from 'react';
-import Modal from "./Modal";
 
 
 class Search extends React.Component {
@@ -15,50 +14,36 @@ class Search extends React.Component {
             return (
                 <div className="results-container">
                     { this.state.Books.map(result => {
+                        debugger;
                         return (
-                            
-                                <a key={result.id} onClick={this.searchFetchDetail(result.isbn)} className="result-item">
-                                    <h6 className="image-username">{result.title}</h6>
-                                </a>
+                            <a key={result.id} href={`http://openlibrary.org/api/volumes/brief/isbn/${result.isbn}.json`} className="result-item">
+                                <h6 className="image-username">{result.title}</h6>
+                            </a>
                         )
                     })}
 
                 </div>
-                        )
-                    }
+            )
+        }
 
     }
 
     componentDidMount() {
-                        this.setState({ inputValue: this.props.inputValue });
+        this.setState({ inputValue: this.props.inputValue });
     }
     handleChange = (e) => {
-                        this.setState({ inputValue: e.target.value });
+        this.setState({ inputValue: e.target.value });
     }
 
     fetchBooksWithFetchAPI = (url) => {
-                        this.setState({ ...this.state, isFetching: true });
+        this.setState({ ...this.state, isFetching: true });
         fetch(url)
             .then(response => response.json())
             .then(result => {
-                        this.setState({ Books: result.docs, isFetching: false })
-                    })
+                this.setState({ Books: result.docs, isFetching: false })
+            })
             .catch(e => {
-                        console.log(e);
-                this.setState({ ...this.state, isFetching: false });
-            });
-
-    };
-
-    fetchBooksWithFetchDetailAPI = (url) => {
-                        this.setState({ ...this.state, isFetching: true });
-        fetch(url)
-            .then(response => response.json())
-            .then(result => {
-                        this.setState({ BookDetail: result, isFetching: false })
-                    })
-            .catch(e => {
-                        console.log(e);
+                console.log(e);
                 this.setState({ ...this.state, isFetching: false });
             });
 
@@ -66,34 +51,26 @@ class Search extends React.Component {
 
     async searchFetch(key) {
 
-                        console.log(key);
-        this.fetchBooksWithFetchAPI("http://openlibrary.org/search.json?q=" + key);
+        console.log(key);
+        this.fetchBooksWithFetchAPI("http://openlibrary.org/search.json?q=" + key)
 
 
-    };
-
-    searchFetchDetail(key) {
-        debugger;
-        //console.log(key);
-        //if(key>0)
-        //this.fetchBooksWithFetchDetailAPI("http://openlibrary.org/api/volumes/brief/isbn/" + key);
+    }
 
 
-    };
 
 
     render() {
         return (
-                    <div>
-                        <div className="App-header">
-                            Please type keywords to search your favoriate book
+            <div>
+                <div className="App-header">
+                    Please type keywords to search your favoriate book
                 <input value={this.state.inputValue} onChange={this.handleChange} onBlur={() => this.searchFetch(this.state.inputValue)} className="search_field" />
-                        </div>
-                        <hr />
-                        <Modal show={this.state.show}>Message in Modal</Modal>
-                        {this.searchResult()}
+                </div>
+                <hr />
+                {this.searchResult()}
 
-                    </div>
+            </div>
         )
     }
 
